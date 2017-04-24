@@ -11,6 +11,14 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "cors": "^2.8.3",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "express-jwt": "^5.3.0",
+    "jsonwebtoken": "^7.3.0",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.3.0"
   }
 }

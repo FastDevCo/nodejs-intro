@@ -1,9 +1,13 @@
+const _ = require('lodash')
+const jwt = require('jsonwebtoken')
+const expressJWT = require('express-jwt')
+
+const SECRET = 'not a very good secret'
+
 /*
- *   Just returns a valid UUID, e.g
- *     uuid(); // 76306e1f-2614-4f95-ae14-b271127cc774
- *
- *       We use this to give tasks IDs. Why? Because UUIDs are fn awesome.
- *       */
+  Just returns a valid UUID, e.g
+  uuid(); // 76306e1f-2614-4f95-ae14-b271127cc774
+*/
 function uuid() {
     var i, random;
     var uuid = '';
@@ -19,6 +23,21 @@ function uuid() {
     return uuid;
 }
 
+
+/*
+  Create a JWT token for user
+*/
+function createToken(user) {
+  return jwt.sign(_.omit(user, 'password'), SECRET, {expiresIn: 60*60*5});
+}
+
+/*
+  Express middleware that checks JWT tokens
+*/
+const jwtCheck = expressJWT({secret: SECRET});
+
 module.exports = {
-  uuid
+  uuid,
+  createToken,
+  jwtCheck
 }
