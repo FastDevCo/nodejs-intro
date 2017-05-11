@@ -45,7 +45,7 @@ app.use(bodyParser.json())
 // API
 
 app.get('/', (req, res) => {
-  res.send('This is the TODO API v1.0')
+  res.json({text: 'This is the TODO API v1.0'})
 })
 
 // TODO API
