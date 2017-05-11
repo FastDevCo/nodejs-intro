@@ -8,7 +8,7 @@ Before you arrive to the event we'd like you to take care of some basic things:
 * go through the basics of JavaScript (unless you are confident you have JS in good memory)
   * we recommend https://github.com/workshopper/javascripting by [NodeSchool](https://nodeschool.io/).
   * during the event, we are going to work on https://github.com/workshopper/learnyounode before starting the actual course material so you can preinstall it and make sure it works.
-* `git clone git@github.com:FastDevCo/nodejs-intro.git`
+* `git clone https://github.com/FastDevCo/nodejs-intro.git`
   * please *don't* download the repository as a `.zip` because we want you to be able to easily pull any changes
   * Note: the course has not yet been pushed to this repository, but a `git pull` should suffice at the event.
 
