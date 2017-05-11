@@ -2,7 +2,7 @@
 
 **WIP**
 
-Currently this project contains a Node.js API that can be used with [React intro](https://github.com/fastdevco/react-intro). Some of the later exercises move from using localStorage to using an API.
+Currently this project contains a Node.js API that can be used with example application from [React intro](https://github.com/fastdevco/react-intro). Some of the later exercises move from using localStorage to using an API.
 
 ### Usage
 
