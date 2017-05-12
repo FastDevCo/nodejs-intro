@@ -8,7 +8,7 @@ const app = express()
 const PORT = process.env.PORT || 8888
 
 // Check out the docs from docs/db_version_2_docs/index.html
-const db = require('./db')
+const db = require('./addons/db')
 
 // MIDDLEWARE
 
@@ -68,13 +68,12 @@ todoAPI.delete('/api/todos/:taskId', (req, res) => {
 todoAPI.put('/api/todos/:taskId', (req, res) => {
 
   const username = req.user.username;
-  db.getTask(req.param.taskId)
-  .then(task => {
+  db.isOwner(username, req.params.taskId)
+  .then(owner => {
     // Lets check first if the user is owner of that Task
-    if (task.owner !== username) return res.status(401).json({error: 'permission denied'})
+    if (!owner) return res.status(401).json({error: 'permission denied'})
     // Update Task
-    const updatedTask = Object.assign(task, req.body)
-    return db.updateTask(username, req.params.taskId, updatedTask.value, updateTask.done)
+    return db.updateTask(req.params.taskId, req.body)
   })
   .then(updatedTask => {
     res.json(updatedTask)
@@ -90,7 +89,7 @@ authAPI.post('/api/auth/register', (req, res) => {
   const {username, password} = req.body
 
   // Check if user exists
-  db.userExist(username)
+  db.userExists(username)
   .then(usernameExists => {
     if (usernameExists) {
       // Nope!
@@ -99,7 +98,7 @@ authAPI.post('/api/auth/register', (req, res) => {
     // Create one...
     return db.createUser(username, password)
   }).then(user => {
-    return res.status(201).json({token: createToken(user)})
+    return res.json({token: createToken(user)})
   })
 })
 
@@ -130,5 +129,6 @@ app.listen(PORT, () => {
 // exports for tests
 
 module.exports = {
-  app
+  app,
+  db
 }
