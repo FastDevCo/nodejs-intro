@@ -7,7 +7,8 @@ Hello and welcome!
 
 You are making something similar in this course that there is in `solution`-folder
 
-
+## Learnyournode - TL;DR
+https://github.com/FastDevCo/learnyounode-tldr
 
 ## DB.js documentation
 There can be some references to `db.js` documentation. Its in the repository and also hosted here:
