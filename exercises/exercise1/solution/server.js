@@ -7,7 +7,7 @@ const app = express()
 const PORT = process.env.PORT || 8888
 
 // Check out the docs from docs/db_version_1_docs/index.html
-const db = require('./db')
+const db = require('./addons/db')
 
 // MIDDLEWARE
 

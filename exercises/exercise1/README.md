@@ -8,20 +8,18 @@ TODO application.
 The API should behave according to the API documentation and you should be able to
 test it by running the [React intro](https://github.com/fastdevco/react-intro) project.
 
-No authentication, users or database is required. However, you should store state
-in memory, eg. in a JS object. Adding a TODO with a POST request should mean that
+No authentication or users is required. However, you should store state
+using `addons/db.js` (documentation at `/docs/db_version_1_docs`)
+
+Adding a TODO with a POST request should mean that
 this TODO is listed by `GET /api/todos`.
 
-Bonus challenge: use TDD and pair-programming
-* coder A writes a testcase for `GET /`
-* coder B writes an API endpoint for `GET /` that passes the test
-* repeat but switch turns (B writes test, A implements the endpoint)
+Bonus challenge: use pair-programming
 
 Hints:
 * http://expressjs.com/en/starter/basic-routing.html
 * http://expressjs.com/en/4x/api.html#req.body
-* `test.js` contains what you need to know about testing
-  * TDD can be quite helpful! first create the test, then implement the API.
+
 * `lib.js` contains a function for UUIDs - you'll probably want to use that when creating tasks.
 
 

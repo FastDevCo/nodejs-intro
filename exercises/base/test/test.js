@@ -1,50 +1,80 @@
-/*
-
-These are your tests. Run them with `npm test` (in your CLI).
-
-This explains testing with Mocha (test runner) and Chai (syntax sugar)
-
-http://mherman.org/blog/2015/09/10/testing-node-js-with-mocha-and-chai/#.WRRuJLyGOEI
-
-Relevant documentation:
-
-https://mochajs.org/
-http://chaijs.com/
-https://github.com/chaijs/chai-http
-*/
+const jwt = require('jsonwebtoken')
 
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const should = chai.should()
 const assert = chai.assert
-
-const {app} = require('../server')
+const { app, db } = require('../server')
 chai.use(chaiHttp)
 
-describe('API', function () {
-  it('should return 200 with a greeting', (done) => {
+
+describe('Tasks CRUD', function() {
+  it('should list ALL tasks on /api/todos GET', done => {
+    db.allTasks()
+    .then(dbdata => {
+
     chai.request(app)
-      .get('/')
+      .get('/api/todos')
       .end((err, res) => {
         res.should.have.status(200)
-        res.body.should.deep.equal({'text': 'This is not correct....'})
-        done() // call me when the test is ready
+        res.body.should.deep.equal(dbdata)
+        done()
+      })
+    })
+  })
+
+  it('should add a SINGLE Task on /api/todos POST', done => {
+    chai.request(app)
+      .post('/api/todos')
+      .send({value: 'foobar'})
+      .end((err, res) => {
+        res.should.have.status(200)
+        res.body.should.have.all.keys('id', 'done', 'value')
+        assert(res.body.done == false)
+        assert(res.body.value == 'foobar')
+        done()
       })
   })
-})
 
-describe('TODO items API', function () {
+  it('should update a SINGLE task on /api/todos/<id> PUT', done => {
+    const testTask = db.DEFAULT_STATE[0]
+    const put = () => chai.request(app).put(`/api/todos/${testTask._id}`)
+    put().send({value: 'duhbar'})
+    .then(res1 => {
+      res1.should.have.status(200)
+      res1.body.should.have.all.keys('id', 'done', 'value', 'owner')
+      res1.body.should.have.property('done', false)
+      res1.body.should.have.property('value', 'duhbar')
+      return put().send({done: true})
+    })
+    .then(res2 => {
+      res2.should.have.status(200)
+      res2.body.should.have.all.keys('id', 'done', 'value', 'owner')
+      res2.body.should.have.property('done', true)
+      return put().send({done: false})
+    })
+    .then(res3 => {
+      res3.body.should.have.property('done', false)
+      done()
+    }).catch(e => {
+      console.log(e)
+    })
+  })
 
-  // it('should list ALL tasks on /api/todos GET', (done) => {
-  //   chai.request(app)
-  //     .get('/api/todos')
-  //     .end((err, res) => {
-  //       // asserts
-  //       done()
-  //     })
-  // })
+  it('should delete a SINGLE blob on /api/todos/<id> DELETE', done => {
+    const testTask = db.DEFAULT_STATE[0]._id
 
-  // it('maybe there was some other things to test too?', done => {
-  // })
-
+    chai.request(app)
+      .delete(`/api/todos/${testTask}`)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(200)
+        res.body.should.deep.equal({})
+        chai.request(app).get('/api/todos').end((err, res) => {
+          res.body.length.should.equal(db.DEFAULT_STATE.length-1)
+          res.body[0].value.should.not.equal('duhbar')
+          done()
+        })
+      })
+  })
 })

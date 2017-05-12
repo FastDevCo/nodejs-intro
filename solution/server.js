@@ -3,97 +3,114 @@ const cors = require('cors')
 const express = require('express')
 const {uuid, createToken, jwtCheck} = require('./lib')
 
+
 const app = express()
-
 const PORT = process.env.PORT || 8888
-const AUTH = (process.env.AUTH || false) == 'true' ? true : false
 
-// WIP warning: these actually mutate due to TODO_DB reduce just
-// reorganising the references and the tests abuse that...
-const DEFAULT_STATE = [{
-    'id': '1e01ba13-ea47-4d24-9131-d95c23d1bb8f',
-    'done': false,
-    'value': 'Learn React'
-  },{
-    'id': '076e0daf-e4ee-42af-8c3d-f6210920b0b7',
-    'done': true,
-    'value': 'Rake the yard'
-  },{
-    'id': '5516fdbb-046a-4a4a-9085-36086b5ef00a',
-    'done': false,
-    'value': 'Buy milk'
-  },{
-    'id': '385f6953-9658-4b3d-a791-afcd9460cb2b',
-    'done': false,
-    'value': 'Buy eggs'
-  },{
-    'id': 'e8f3921b-157c-4ac5-b54c-24485048a9c1',
-    'done': true,
-    'value': 'Prepare next trip to south'
-  }
-]
-
-// "high performance in memory database"
-let TODO_DB = DEFAULT_STATE.reduce((acc, val) => Object.assign(acc, {[val.id]: val}), {})
-let USER_DB = {}
+// Check out the docs from docs/db_version_2_docs/index.html
+const db = require('./addons/db')
 
 // MIDDLEWARE
 
+
+// CORS is important when you have an API in one address1:port1 and a
+// GUI in another address2:port2 that makes AJAX requests to your API.
+// https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+// However, right now you just need to know that we have it enabled on every request :)
 app.use(cors())
+
+
+// bodyParser middleware reads the data in every request and parses it into a JS object
+// we only support JSON so bodyParser.json() is sufficient.
 app.use(bodyParser.json())
+
 
 // API
 
+// this is how we add handlers for different API endpoints
 app.get('/', (req, res) => {
+  // handle a request
   res.json({text: 'This is the TODO API v1.0'})
 })
 
 // TODO API
-
 const todoAPI = express.Router()
 
-// use auth if enabled
-if (AUTH) todoAPI.use('/api/todos', jwtCheck)
+todoAPI.use('/api/todos', jwtCheck)
 
 todoAPI.get('/api/todos', (req, res) => {
-  res.json(Object.keys(TODO_DB).map(key => TODO_DB[key]))
+  db.allUserTasks(req.user.username)
+  .then(tasks => {
+    res.json(tasks)
+  })
 })
 
 todoAPI.post('/api/todos', (req, res) => {
-  const task = {id: uuid(), done: false, value: req.body.value}
-  TODO_DB[task.id] = task
-  res.json(task)
+  db.createTask(req.user.username, uuid(), req.body.value, false)
+  .then(task => {
+    res.json(task)
+  })
 })
 
 todoAPI.delete('/api/todos/:taskId', (req, res) => {
-  const taskId = req.params.taskId
-  delete TODO_DB[taskId]
-  res.json({})
+  const { taskId } = req.params
+  // Lets check first if the user is owner of that Task
+  db.isOwner(req.user.username, taskId)
+  .then(owner => {
+    if (owner) return db.deleteTask(taskId)
+    return res.status(401).json({error: 'permission denied'})
+  })
+  .then(deletedTaskId => {
+    res.json({})
+  })
 })
 
 todoAPI.put('/api/todos/:taskId', (req, res) => {
-  const taskId = req.params.taskId
-  const updatedTask = Object.assign(TODO_DB[taskId], req.body)
-  TODO_DB[taskId] = updatedTask
-  res.json(updatedTask)
+
+  const username = req.user.username;
+  db.isOwner(username, req.params.taskId)
+  .then(owner => {
+    // Lets check first if the user is owner of that Task
+    if (!owner) return res.status(401).json({error: 'permission denied'})
+    // Update Task
+    return db.updateTask(req.params.taskId, req.body)
+  })
+  .then(updatedTask => {
+    res.json(updatedTask)
+  })
+
 })
 
 
 // AUTH API
-
 const authAPI = express.Router()
+
 authAPI.post('/api/auth/register', (req, res) => {
   const {username, password} = req.body
-  if (USER_DB[username]) return res.status(400).json({error: 'username taken'})
-  USER_DB[username] = {username, password}
-  res.json({token: createToken({username})})
+
+  // Check if user exists
+  db.userExists(username)
+  .then(usernameExists => {
+    if (usernameExists) {
+      // Nope!
+      return res.status(400).json({error: 'username taken'})
+    }
+    // Create one...
+    return db.createUser(username, password)
+  }).then(user => {
+    return res.json({token: createToken(user)})
+  })
 })
 
 authAPI.post('/api/auth/login', (req, res) => {
   const {username, password} = req.body
-  const user = USER_DB[username]
-  if (user && user.password == password) res.json({token: createToken({username})})
-  else res.status(400).json({error: 'invalid username or password'})
+  db.checkUserCredentials(username, password)
+  .then(status => {
+    if (status) {
+      return res.json({token: createToken({username})})
+    }
+    return res.status(400).json({error: 'invalid username or password'})
+  })
 })
 
 // SERVER
@@ -101,13 +118,17 @@ authAPI.post('/api/auth/login', (req, res) => {
 app.use(todoAPI)
 app.use(authAPI)
 
+
+// SERVER
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`)
-  console.log(`AUTH: ${AUTH}`)
 })
+
+
+// exports for tests
 
 module.exports = {
   app,
-  DEFAULT_STATE,
-  USER_DB
+  db
 }
