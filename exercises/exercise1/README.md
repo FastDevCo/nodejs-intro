@@ -1,6 +1,6 @@
 # Exercise 1
 
-Groups of 2-3 students.
+Form groups of 2-3 students.
 
 Create a basic API for [React intro](https://github.com/fastdevco/react-intro)
 TODO application.
@@ -11,8 +11,6 @@ test it by running the [React intro](https://github.com/fastdevco/react-intro) p
 No authentication, users or database is required. However, you should store state
 in memory, eg. in a JS object. Adding a TODO with a POST request should mean that
 this TODO is listed by `GET /api/todos`.
-
-**You must have e2e tests for each endpoint**
 
 Bonus challenge: use TDD and pair-programming
 * coder A writes a testcase for `GET /`
@@ -43,7 +41,7 @@ Hints:
   {
     "id": "1e01ba13-ea47-4d24-9131-d95c23d1bb8f",
     "done": false,
-    "task": "Learn React"
+    "value": "Learn React"
   },
   ...
 ]

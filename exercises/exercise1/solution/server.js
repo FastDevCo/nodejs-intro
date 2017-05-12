@@ -32,6 +32,43 @@ app.get('/', (req, res) => {
   res.json({text: 'This is the TODO API v1.0'})
 })
 
+// TODO API
+
+app.get('/api/todos', (req, res) => {
+  db.allTasks()
+  .then(tasks => {
+    res.json(tasks)
+  })
+})
+
+app.post('/api/todos', (req, res) => {
+  db.createTask(uuid(), req.body.value, false)
+  .then(task => {
+    res.json(task)
+  })
+})
+
+app.delete('/api/todos/:taskId', (req, res) => {
+  db.deleteTask(req.params.taskId)
+  .then(deletedTaskId => {
+    res.json({})
+  })
+})
+
+app.put('/api/todos/:taskId', (req, res) => {
+
+  db.getTask(req.param.taskId)
+  .then(task => {
+    const updatedTask = Object.assign(task, req.body)
+    return db.updateTask(req.params.taskId, updatedTask.value, updateTask.done)
+  })
+  .then(updatedTask => {
+    res.json(updatedTask)
+  })
+
+})
+
+
 // SERVER
 
 app.listen(PORT, () => {
