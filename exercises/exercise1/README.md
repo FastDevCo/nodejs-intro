@@ -19,7 +19,7 @@ Bonus challenge: use pair-programming
 Hints:
 * http://expressjs.com/en/starter/basic-routing.html
 * http://expressjs.com/en/4x/api.html#req.body
-
+* https://www.getpostman.com/apps is a great app for manually testing API endpoints! 
 * `lib.js` contains a function for UUIDs - you'll probably want to use that when creating tasks.
 
 
