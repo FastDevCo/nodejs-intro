@@ -42,14 +42,14 @@ describe('Tasks CRUD', function() {
     put().send({value: 'duhbar'})
     .then(res1 => {
       res1.should.have.status(200)
-      res1.body.should.have.all.keys('id', 'done', 'value', 'owner')
+      res1.body.should.have.all.keys('id', 'done', 'value')
       res1.body.should.have.property('done', false)
       res1.body.should.have.property('value', 'duhbar')
       return put().send({done: true})
     })
     .then(res2 => {
       res2.should.have.status(200)
-      res2.body.should.have.all.keys('id', 'done', 'value', 'owner')
+      res2.body.should.have.all.keys('id', 'done', 'value')
       res2.body.should.have.property('done', true)
       return put().send({done: false})
     })
@@ -71,7 +71,7 @@ describe('Tasks CRUD', function() {
         res.should.have.status(200)
         res.body.should.deep.equal({})
         chai.request(app).get('/api/todos').end((err, res) => {
-          res.body.length.should.equal(db.DEFAULT_STATE.length-1)
+          res.body.length.should.equal(db.DEFAULT_STATE.length)
           res.body[0].value.should.not.equal('duhbar')
           done()
         })

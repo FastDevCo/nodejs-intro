@@ -81,23 +81,29 @@ function deleteTask(id) {
  * @return     {Task} Promise of the Task
  */
 function getTask(id) {
-  return db.get(id)
+ return db.get(id)
+   .then(d => ({id: d._id, done: d.done, value: d.value}))
 }
+
 
 /**
  * Update Task from database
  * @param      {string}   id Tasks id
- * @param      {string}   value Tasks content
- * @param      {boolean}  done Flag if task is done/undone
+ * @param      {Object}  changes Partial changes as object
  * @return     {Task} Promise of the just created task
  */
-function updateTask(id, value, done) {
-  return createTask(id, value, done)
+function updateTask(id, changes) {
+  return db.get(id)
+  .then(task => db.put(Object.assign(task, changes)))
+  .then(r => db.get(id))
+  .then(r => ({id: r._id, value:r.value, done:r.done}))
 }
 
 module.exports = {
   allTasks,
+  getTask,
   createTask,
   deleteTask,
-  updateTask
+  updateTask,
+  DEFAULT_STATE
 }

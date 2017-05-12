@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
 
-
+const {uuid} = require('./lib')
 const app = express()
 const PORT = process.env.PORT || 8888
 
@@ -57,11 +57,7 @@ app.delete('/api/todos/:taskId', (req, res) => {
 
 app.put('/api/todos/:taskId', (req, res) => {
 
-  db.getTask(req.param.taskId)
-  .then(task => {
-    const updatedTask = Object.assign(task, req.body)
-    return db.updateTask(req.params.taskId, updatedTask.value, updateTask.done)
-  })
+  db.updateTask(req.params.taskId, req.body)
   .then(updatedTask => {
     res.json(updatedTask)
   })
@@ -79,5 +75,6 @@ app.listen(PORT, () => {
 // exports for tests
 
 module.exports = {
-  app
+  app,
+  db
 }

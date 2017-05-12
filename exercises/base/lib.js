@@ -16,3 +16,7 @@ function uuid() {
 
     return uuid;
 }
+
+module.exports = {
+  uuid
+}

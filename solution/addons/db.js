@@ -118,10 +118,8 @@ function getTask(id) {
 
 /**
  * Update Task from database
- * @param      {string}   id Owner
  * @param      {string}   id Tasks id
- * @param      {string}   value Tasks content
- * @param      {boolean}  done Flag if task is done/undone
+ * @param      {Object}  changes Partial changes as object
  * @return     {Task} Promise of the just created task
  */
 function updateTask(id, changes) {
