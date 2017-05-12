@@ -67,6 +67,7 @@ function allTasks() {
     include_docs: true
   }).then(r => r.rows)
   .then(r => r.map(d => d.doc))
+  .then(r => r.filter(d => d.value))
   .then(r => r.map(d => ({id: d._id, done: d.done, value: d.value})))
 }
 
