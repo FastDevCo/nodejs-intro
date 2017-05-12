@@ -5,7 +5,35 @@ const bcrypt = require('bcrypt-nodejs')
 PouchDB.plugin(require('pouchdb-find'))
 const DB_PATH = './nodejs_introdb_v2'
 
-const DEFAULT_STATE = []
+const DEFAULT_STATE = [
+  {
+      '_id': '1e01ba13-ea47-4d24-9131-d95c23d1bb8f',
+      'done': false,
+      'owner': 'testuser',
+      'value': 'Learn React'
+    },{
+      '_id': '076e0daf-e4ee-42af-8c3d-f6210920b0b7',
+      'done': true,
+      'owner': 'testuser',
+      'value': 'Rake the yard'
+    },{
+      '_id': '5516fdbb-046a-4a4a-9085-36086b5ef00a',
+      'done': false,
+      'owner': 'testuser',
+      'value': 'Buy milk'
+    },{
+      '_id': '385f6953-9658-4b3d-a791-afcd9460cb2b',
+      'done': false,
+      'owner': 'testuser',
+      'value': 'Buy eggs'
+    },{
+      '_id': 'e8f3921b-157c-4ac5-b54c-24485048a9c1',
+      'done': true,
+      'owner': 'testuser',
+      'value': 'Prepare next trip to south'
+    },
+    { _id: 'testuser', 'password': 'nopw'}
+]
 
 let db
 
@@ -90,14 +118,15 @@ function getTask(id) {
 
 /**
  * Update Task from database
- * @param      {string}   id Owner
  * @param      {string}   id Tasks id
- * @param      {string}   value Tasks content
- * @param      {boolean}  done Flag if task is done/undone
+ * @param      {Object}  changes Partial changes as object
  * @return     {Task} Promise of the just created task
  */
-function updateTask(owner, id, value, done) {
-  return createTask(owner, id, value, done)
+function updateTask(id, changes) {
+  return db.get(id)
+  .then(task => db.put(Object.assign(task, changes)))
+  .then(r => db.get(id))
+  .then(r => ({id: r._id, owner:r.owner, value:r.value, done:r.done}))
 }
 
 function hash(password) {
@@ -171,5 +200,6 @@ module.exports = {
   updateTask,
   createUser,
   userExists,
-  checkUserCredentials
+  checkUserCredentials,
+  DEFAULT_STATE
 }
