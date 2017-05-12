@@ -4,8 +4,12 @@ Node.js introduction course
 
 Hello and welcome!
 
+## HOWTO
 
-You are making something similar in this course that there is in `solution`-folder
+* you will do the assignments in `exercises` directory to `exercises/base`
+* `cd exercises/base` and read the README.md there !
+
+The `solution`-folder contains an example solutions that you can refer to if you get stuck!
 
 ## Learnyournode - TL;DR
 https://github.com/FastDevCo/learnyounode-tldr
