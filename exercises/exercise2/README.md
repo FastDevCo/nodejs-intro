@@ -6,6 +6,10 @@ Continue in your groups, support the same API as in ex1.
 - Replace `addons/db.js` with `db.js` from this folder.
 - That adds support for multiple users into database. Read documentation about the new DB api from `/docs/db_version_2_docs`
 
+## Tests
+Update also tests, new ones have tests modified for users and authentication.
+copy `test.js` to your `base/test/test.js`
+
 ## Authentication
 - Replace `lib.js` with `lib.js` from this folder.
 - It provides few helpers for the authentication such as `createToken` and `jwtCheck`
