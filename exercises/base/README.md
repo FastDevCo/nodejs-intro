@@ -3,6 +3,7 @@
 
 This is where you will build your exercises. Before you begin:
 
+* install all the dependencies: `npm install` (in this directory!!)
 * try running the project `npm run`
 * try running tests - they will fail - `npm test`
 * read through the server.js and try to figure it out
