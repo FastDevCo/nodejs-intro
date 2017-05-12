@@ -38,7 +38,15 @@ const DEFAULT_STATE = [
 let db
 
 function initDB(DB_PATH) {
-  db = new PouchDB(DB_PATH)
+  let db
+  if (process.env.TESTING) {
+    // For tests, don't persist PouchDB state, just keep it in memory
+    PouchDB.plugin(require('pouchdb-adapter-memory'))
+    db = new PouchDB('tests', {adapter: 'memory'})
+  } else {
+    // Persisting way to initialize PouchDB
+    db = new PouchDB(DB_PATH)
+  }
   db.createIndex({
     index: {fields: ['owner']}
   });
