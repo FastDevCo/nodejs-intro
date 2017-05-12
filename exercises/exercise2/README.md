@@ -32,6 +32,31 @@ When you have that kind of ownership you shouldn't let other users to get each o
 * all TODO resources should have an owner and only the current user's TODOs should be listed and available to update
 
 
+# Usage with frontend application
+After you have implemented all the api-endpoints and your server will pass the test-suite it's time to try it with an actual application.
+
+### Steps to follow
+
+#### First pull the repository
+```
+git clone -b use-api https://github.com/FastDevCo/react-intro.git
+```
+#### Install dependencies
+```
+cd react-intro/example_solution
+npm install
+```
+
+#### Build the frontend application and run the build
+```
+npm run build
+npm run server
+# This will print out url like http://127.0.0.1:8080 to visit with your browser
+# Use your web browser and try out the frontend application with your API-server
+```
+#### If it works, your done! Good job!
+
+
 ## Tips
 You might want to discover how Express.js's routers work.
 It helps to organize your code and makes the authenticated/unauthenticated paths of your application more clear.
