@@ -8,6 +8,7 @@ Hello and welcome!
 
 * you will do the assignments in `exercises` directory to `exercises/base`
 * `cd exercises/base` and read the README.md there !
+* protip: check out [nodemon](https://nodemon.io/), it watches your server file and restarts the server whenever you make a change
 
 The `solution`-folder contains an example solutions that you can refer to if you get stuck!
 
