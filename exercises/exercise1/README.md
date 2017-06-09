@@ -51,7 +51,7 @@ Hints:
 * accepts a POST body (JSON) with following structure:
 ```
 {
-  "task": "string"
+  "value": "string"
 }
 ```
 
@@ -60,7 +60,7 @@ Hints:
 {
   "id": "1e01ba13-ea47-4d24-9131-d95c23d1bb8f",
   "done": false,
-  "task": "Learn React"
+  "value": "Learn React"
 }
 ```
 
@@ -74,7 +74,7 @@ Hints:
 {
   "id": "1e01ba13-ea47-4d24-9131-d95c23d1bb8f",
   "done": false,
-  "task": "Learn Node.js"
+  "value": "Learn Node.js"
 }
 ```
 
