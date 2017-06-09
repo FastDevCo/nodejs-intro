@@ -66,8 +66,8 @@ Hints:
 
 `PUT /api/todos/:id`
 
-* accepst a body with any of the "id", "done" and "task" fields
-  * partial updates accepted, eg: `{"task": "Learn Node.js"}`
+* accepts a body with any of the "id", "done" and "value" fields
+  * partial updates accepted, eg: `{"value": "Learn Node.js"}`
 * updates the task with the correct :id
 * returns the updated task with 200 OK or 204 NO CONTENT
 ```

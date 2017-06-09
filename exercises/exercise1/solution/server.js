@@ -44,7 +44,7 @@ app.get('/api/todos', (req, res) => {
 app.post('/api/todos', (req, res) => {
   db.createTask(uuid(), req.body.value, false)
   .then(task => {
-    res.json(task)
+    res.status(201).json(task)
   })
 })
 
