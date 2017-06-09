@@ -19,7 +19,7 @@ Bonus challenge: use pair-programming
 Hints:
 * http://expressjs.com/en/starter/basic-routing.html
 * http://expressjs.com/en/4x/api.html#req.body
-* https://www.getpostman.com/apps is a great app for manually testing API endpoints! 
+* https://www.getpostman.com/apps is a great app for manually testing API endpoints!
 * `lib.js` contains a function for UUIDs - you'll probably want to use that when creating tasks.
 
 
@@ -51,7 +51,7 @@ Hints:
 * accepts a POST body (JSON) with following structure:
 ```
 {
-  "task": "string"
+  "value": "string"
 }
 ```
 
@@ -60,7 +60,7 @@ Hints:
 {
   "id": "1e01ba13-ea47-4d24-9131-d95c23d1bb8f",
   "done": false,
-  "task": "Learn React"
+  "value": "Learn React"
 }
 ```
 
@@ -74,7 +74,7 @@ Hints:
 {
   "id": "1e01ba13-ea47-4d24-9131-d95c23d1bb8f",
   "done": false,
-  "task": "Learn Node.js"
+  "value": "Learn Node.js"
 }
 ```
 
